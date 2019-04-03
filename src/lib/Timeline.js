@@ -991,7 +991,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     const outerComponentStyle = {
-      height: `${height}px`
+      height: `${height + 64}px`
     }
 
     return (
@@ -1008,15 +1008,6 @@ export default class ReactCalendarTimeline extends Component {
             ref={el => (this.container = el)}
             className="react-calendar-timeline"
           >
-            {this.header(
-              canvasTimeStart,
-              canvasTimeEnd,
-              canvasWidth,
-              minUnit,
-              timeSteps,
-              headerLabelGroupHeight,
-              headerLabelHeight
-            )}
             {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
             <div style={{display: 'inline-block'}}>
 
@@ -1034,7 +1025,16 @@ export default class ReactCalendarTimeline extends Component {
                 onScroll={this.onScroll}
                 isInteractingWithItem={isInteractingWithItem}
               >
-              <MarkerCanvas>
+                {this.header(
+                  canvasTimeStart,
+                  canvasTimeEnd,
+                  canvasWidth,
+                  minUnit,
+                  timeSteps,
+                  headerLabelGroupHeight,
+                  headerLabelHeight
+                )}
+                <MarkerCanvas>
                   {this.items(
                     canvasTimeStart,
                     zoom,
@@ -1070,7 +1070,7 @@ export default class ReactCalendarTimeline extends Component {
                     minUnit,
                     timeSteps
                   )}
-              </MarkerCanvas>
+                </MarkerCanvas>
               </ScrollElement>
               </div>
             </div>
