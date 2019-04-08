@@ -237,20 +237,6 @@ export default class Item extends Component {
         enabled:
           this.props.selected && (this.canResizeLeft() || this.canResizeRight())
       })
-      .dropzone({
-        accept: '.dragged-point',
-        overlap: 0.75,
-        ondragenter: (event) => {
-          this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
-        },
-        ondrop: (event) => {
-          this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
-        },
-        ondragleave: (event) => {
-          this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
-        }
-      })
-
       .draggable({
         enabled: this.props.selected
       })
@@ -427,6 +413,22 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
+  componentDidMount(){
+    interact(this.item).dropzone({
+      accept: '.dragged-point',
+      overlap: 0.75,
+      ondragenter: (event) => {
+        this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
+      },
+      ondrop: (event) => {
+        this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
+      },
+      ondragleave: (event) => {
+        this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
+      }
+    })
+  }
+
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
 
@@ -442,10 +444,12 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
+      // this.props.selected && 
     if (this.props.selected && !interactMounted) {
       this.mountInteract()
       interactMounted = true
     }
+
 
     if (
       interactMounted &&
@@ -468,6 +472,11 @@ export default class Item extends Component {
     if (interactMounted && couldDrag !== willBeAbleToDrag) {
       interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
+  }
+
+  componentWillUnmount(){
+    console.log('Unmount')
+    interact(this.item).unset()
   }
 
   onMouseDown = e => {
