@@ -475,7 +475,7 @@ export default class Item extends Component {
   }
 
   componentWillUnmount(){
-    interact(this.item).unset()
+    this.item && interact(this.item).unset()
   }
 
   onMouseDown = e => {
