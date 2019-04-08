@@ -413,21 +413,6 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
-  componentDidMount(){
-    interact(this.item).dropzone({
-      accept: '.dragged-point',
-      overlap: 0.75,
-      ondragenter: (event) => {
-        this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
-      },
-      ondrop: (event) => {
-        this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
-      },
-      ondragleave: (event) => {
-        this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
-      }
-    })
-  }
 
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
@@ -472,10 +457,24 @@ export default class Item extends Component {
     if (interactMounted && couldDrag !== willBeAbleToDrag) {
       interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
+    if (this.item){
+      interact(this.item).dropzone({
+        accept: '.dragged-point',
+        overlap: 0.75,
+        ondragenter: (event) => {
+          this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
+        },
+        ondrop: (event) => {
+          this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
+        },
+        ondragleave: (event) => {
+          this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
+        }
+      })
+    }
   }
 
   componentWillUnmount(){
-    console.log('Unmount')
     interact(this.item).unset()
   }
 
