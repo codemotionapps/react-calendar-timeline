@@ -1039,6 +1039,7 @@ export default class ReactCalendarTimeline extends Component {
                 )}
                 <div style={{height: 64}} />
                 <MarkerCanvas>
+                  {this.rows(canvasWidth, groupHeights, groups)}
                   {this.items(
                     canvasTimeStart,
                     zoom,
@@ -1058,7 +1059,6 @@ export default class ReactCalendarTimeline extends Component {
                     height,
                     headerHeight
                   )}
-                {this.rows(canvasWidth, groupHeights, groups)}
                   {this.infoLabel()}
                   {this.childrenWithProps(
                     canvasTimeStart,

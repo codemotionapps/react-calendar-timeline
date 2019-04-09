@@ -226,7 +226,7 @@ export default class Items extends Component {
             id="svg-canvas"
             width="3000"
             viewBox={`0 0 3000 800`}
-            style={{ zIndex: 70 ,position:'relative', marginTop:64}}
+            style={{ zIndex: 70 ,position:'absolute', top:0, left: 0, marginTop:64}}
           >
             {dimensionConnections.map((line,i) => <Connection {...line} selected={this.isLineSelected(line)} key={i} />)}
           </svg>
