@@ -113,10 +113,10 @@ const items = [
   },
   {
     id: 4,
-    group: 2,
+    group: 1,
     title: 'Prepare design then do other task',
-    start: moment().add(-16, 'days').valueOf(),
-    end: moment().add(-10, 'days').valueOf(),
+    start: moment().add(1, 'days').valueOf(),
+    end: moment().add(7, 'days').valueOf(),
     color: '#9e372e',
     bgColor: '#f2968f'
   },

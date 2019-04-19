@@ -12,17 +12,47 @@ function arrow(endPoint){
     ${bottom}`
 }
 
-const Connection = ({startPoint, controlPoint, controlPoint2, endPoint, selected,warning, onClick, onMouseOver}) => <path onClick={onClick} onMouseOver={onMouseOver}
-    d={`
-      M ${startPoint}
-      C ${controlPoint}
-      ${controlPoint2}
-      ${arrow(endPoint)}
-    `}
+function arc(x,y){
+  return `a 5,5 0 0 1 ${x},${y}`
+}
+
+function cubic(startPoint,controlPoint,controlPoint2,endPoint){
+  return `
+  M ${startPoint}
+  C ${controlPoint}
+  ${controlPoint2}
+  ${arrow(endPoint)}
+`
+}
+
+function rectangular(startPoint,endPoint,width){
+  return `
+  M ${startPoint}
+  l 9, 0
+  ${arc(5,5)}
+  l 0, 30
+  ${arc(-5,5)}
+  h ${-(width + 20)}
+  ${arc(-5,-5)}
+  l 0, -30
+  ${arc(5,-5)}
+  l 11, 0
+  m -4,4
+  l 4,-4
+  -4,-4
+`
+}
+
+const Connection = ({startPoint, width, horizontallyAligned, controlPoint, controlPoint2, endPoint, selected, warning, onClick, onMouseOver}) => {
+return <path onClick={onClick} onMouseOver={onMouseOver}
+    d={ horizontallyAligned && warning
+      ? rectangular(startPoint,endPoint,width)
+      : cubic(startPoint,controlPoint,controlPoint2,endPoint)
+    }
     fill="none"
     stroke={warning ? `#FF534D` : selected ? '#00a0fc' : '#d5dbe6'}
     strokeWidth={2}
-/>
+/>}
 
 
 export default Connection

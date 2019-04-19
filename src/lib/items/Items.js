@@ -116,17 +116,21 @@ export default class Items extends Component {
       const startY = st + sh/2
       const endX = el
       const endY = et + eh/2
-      const width = Math.abs(endX-startX)
+      let width = Math.abs(endX-startX)
+      if(width < 100) width = 100 //fix ugly lines
 
       const startPoint = [startX, startY];
       const controlPoint = [startX + width/2 ,startY]
       const controlPoint2 = [endX - width/2 ,endY]
       const endPoint = [endX, endY];
+      const horizontallyAligned = startY === endY
 
       return {
         id,
         startId: start.id,
         endId: end.id,
+        horizontallyAligned,
+        width,
         startPoint,
         controlPoint,
         controlPoint2,
