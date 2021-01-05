@@ -413,6 +413,7 @@ export default class Item extends Component {
     return !!props.canMove
   }
 
+
   componentDidUpdate(prevProps) {
     this.cacheDataFromProps(this.props)
 
@@ -428,10 +429,12 @@ export default class Item extends Component {
     const willBeAbleToResizeRight =
       this.props.selected && this.canResizeRight(this.props)
 
+      // this.props.selected && 
     if (this.props.selected && !interactMounted) {
       this.mountInteract()
       interactMounted = true
     }
+
 
     if (
       interactMounted &&
@@ -454,6 +457,25 @@ export default class Item extends Component {
     if (interactMounted && couldDrag !== willBeAbleToDrag) {
       interact(this.item).draggable({ enabled: willBeAbleToDrag })
     }
+    if (this.item){
+      interact(this.item).dropzone({
+        accept: '.dragged-point',
+        overlap: 0.75,
+        ondragenter: (event) => {
+          this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
+        },
+        ondrop: (event) => {
+          this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
+        },
+        ondragleave: (event) => {
+          this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
+        }
+      })
+    }
+  }
+
+  componentWillUnmount(){
+    this.item && interact(this.item).unset()
   }
 
   onMouseDown = e => {
@@ -561,7 +583,7 @@ export default class Item extends Component {
       position: 'absolute',
       boxSizing: 'border-box',
       left: `${dimensions.left}px`,
-      top: `${dimensions.top}px`,
+      top: `${dimensions.top + 64}px`,
       width: `${dimensions.width}px`,
       height: `${dimensions.height}px`,
       lineHeight: `${dimensions.height}px`

@@ -116,17 +116,21 @@ export default class Items extends Component {
       const startY = st + sh/2
       const endX = el
       const endY = et + eh/2
-      const width = Math.abs(endX-startX)
+      let width = Math.abs(endX-startX)
+      if(width < 100) width = 100 //fix ugly lines
 
       const startPoint = [startX, startY];
       const controlPoint = [startX + width/2 ,startY]
       const controlPoint2 = [endX - width/2 ,endY]
       const endPoint = [endX, endY];
+      const horizontallyAligned = startY === endY
 
       return {
         id,
         startId: start.id,
         endId: end.id,
+        horizontallyAligned,
+        width,
         startPoint,
         controlPoint,
         controlPoint2,
@@ -212,6 +216,9 @@ export default class Items extends Component {
               moveResizeValidator={this.props.moveResizeValidator}
               onDrag={this.props.itemDrag}
               onDrop={this.props.itemDrop}
+              onPointEnter={this.props.onPointEnter}
+              onPointDrop={this.props.onPointDrop}
+              onPointLeave={this.props.onPointLeave}
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
               onSelect={this.props.itemSelect}
@@ -220,9 +227,10 @@ export default class Items extends Component {
             />
           ))}
           <svg
+            id="svg-canvas"
             width="3000"
             viewBox={`0 0 3000 800`}
-            style={{ zIndex: 70 ,position:'relative'}}
+            style={{ zIndex: 70 ,position:'absolute', top:0, left: 0, marginTop:64}}
           >
             {dimensionConnections.map((line,i) => <Connection {...line} selected={this.isLineSelected(line)} key={i} />)}
           </svg>

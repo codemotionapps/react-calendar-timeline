@@ -774,6 +774,9 @@ export default class ReactCalendarTimeline extends Component {
         dimensionItems={dimensionItems}
         groupTops={groupTops}
         items={this.props.items}
+        onPointEnter={this.props.onPointEnter}
+        onPointDrop={this.props.onPointDrop}
+        onPointLeave={this.props.onPointLeave}
         connections={this.props.connections}
         groups={this.props.groups}
         keys={this.props.keys}
@@ -1009,9 +1012,9 @@ export default class ReactCalendarTimeline extends Component {
             className="react-calendar-timeline"
           >
             {sidebarWidth > 0 && this.sidebar(height, groupHeights, headerHeight)}
-            <div style={{display: 'inline-block'}}>
+            <div style={{float: 'right'}}>
 
-              <div style={outerComponentStyle} className="rct-outer">
+              <div onClick={this.props.onClickOuter} style={outerComponentStyle} className="rct-outer">
               <ScrollElement
               scrollRef={el => {
                 this.props.scrollRef(el);
@@ -1034,7 +1037,9 @@ export default class ReactCalendarTimeline extends Component {
                   headerLabelGroupHeight,
                   headerLabelHeight
                 )}
+                <div style={{height: 64}} />
                 <MarkerCanvas>
+                  {this.rows(canvasWidth, groupHeights, groups)}
                   {this.items(
                     canvasTimeStart,
                     zoom,
@@ -1054,7 +1059,6 @@ export default class ReactCalendarTimeline extends Component {
                     height,
                     headerHeight
                   )}
-                {this.rows(canvasWidth, groupHeights, groups)}
                   {this.infoLabel()}
                   {this.childrenWithProps(
                     canvasTimeStart,

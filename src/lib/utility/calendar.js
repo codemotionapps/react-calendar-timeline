@@ -261,7 +261,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
     var groupVal = groups[k++]
 
     // calculate new, non-overlapping positions
-    groupTops.push(totalHeight)
+    groupTops.push(totalHeight + 64)
 
     var groupHeight = 0
     var verticalMargin = 0
@@ -332,7 +332,7 @@ export function nostack(items, groupOrders, lineHeight, groups) {
     var groupVal = groups[j++]
 
     // calculate new, non-overlapping positions
-    groupTops.push(totalHeight)
+    groupTops.push(totalHeight + 64)
 
     var groupHeight = 0
     for (i = 0, iMax = group.length; i < iMax; i++) {

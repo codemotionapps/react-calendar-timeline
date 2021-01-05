@@ -10,7 +10,14 @@ import tasks from './tasks'
 
 import DragItem from './DragItem';
 
+function isRelationAllowed(event,sourceId,targetId){
+  console.log(event,sourceId,targetId)
+  return true
+}
 
+function onConnect(event,sourceId,targetId){
+  console.log(event,sourceId,targetId)
+}
 var minTime = moment()
   .add(-6, 'months')
   .valueOf()
@@ -106,10 +113,10 @@ const items = [
   },
   {
     id: 4,
-    group: 2,
+    group: 1,
     title: 'Prepare design then do other task',
-    start: moment().add(-16, 'days').valueOf(),
-    end: moment().add(-10, 'days').valueOf(),
+    start: moment().add(1, 'days').valueOf(),
+    end: moment().add(7, 'days').valueOf(),
     color: '#9e372e',
     bgColor: '#f2968f'
   },
@@ -351,6 +358,11 @@ export default class App extends Component {
 				groups={groups}
         items={items}
         connections={connections}
+
+        onPointEnter={isRelationAllowed}
+        onPointDrop={onConnect}
+        onPointLeave={()=>{}}
+
 				keys={keys}
 				fixedHeader="fixed"
         fullUpdate
