@@ -157,6 +157,8 @@ export function getNextUnit(unit) {
 export function calculateDimensions({
   itemTimeStart,
   itemTimeEnd,
+  increaseItemCollision,
+  collisionIncrease,
   isDragging,
   isResizing,
   canvasTimeStart,
@@ -187,7 +189,7 @@ export function calculateDimensions({
     left: Math.max(newItemStart - canvasTimeStart, 0) * ratio,
     width: Math.max(itemWidth, 3),
     collisionLeft: newItemStart,
-    collisionWidth: itemTimeRange
+    collisionWidth: increaseItemCollision && collisionIncrease ? itemTimeRange + collisionIncrease : itemTimeRange
   }
 
   return dimensions
@@ -392,7 +394,7 @@ export function stackItems(
     }
   }
 
-  const { keys, lineHeight, stackItems, itemHeightRatio } = props
+  const { keys, lineHeight, stackItems, itemHeightRatio, collisionIncrease } = props
   const {
     draggingItem,
     dragTime,
@@ -427,6 +429,8 @@ export function stackItems(
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
+      increaseItemCollision: item.increaseItemCollision,
+      collisionIncrease,
       isDragging,
       isResizing,
       canvasTimeStart,

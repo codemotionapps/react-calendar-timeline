@@ -97,15 +97,16 @@ const items = [
     id: 2,
     group: 2,
     title: 'Delivers',
-    start: moment().add(-18, 'days').valueOf(),
-    end: moment().add(-16, 'days').valueOf(),
+    start: moment().add(-6, 'days').startOf('day').add(12, 'hours').valueOf(),
+    end: moment().add(-6, 'days').startOf('day').add(13, 'hours').valueOf(),
     color: '#500093',
     bgColor: '#b972f2',
   },
   {
     id: 3,
     group: 1,
-    title: 'This needs to be done first',
+    title: 'Collision Increased: This needs to be done first',
+    increaseItemCollision: true, //in ms
     start: moment().add(-20, 'days').valueOf(),
     end: moment().add(-7, 'days').valueOf(),
     color: '#0071b3',
@@ -358,7 +359,7 @@ export default class App extends Component {
 				groups={groups}
         items={items}
         connections={connections}
-
+        collisionIncrease={4 * 1000 * 3600 * 24} // 4 days
         onPointEnter={isRelationAllowed}
         onPointDrop={onConnect}
         onPointLeave={()=>{}}

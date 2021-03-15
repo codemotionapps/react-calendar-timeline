@@ -22,7 +22,7 @@ const DragItem = ({ task, index, onClick, setItemPosition }) => {
 
 	return <Draggable
 		key={task.id}
-		draggableId={task.id}
+		draggableId={String(task.id)}
 		index={index}
 	>
 		{(provided, snapshot) => {

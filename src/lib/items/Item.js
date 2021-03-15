@@ -241,12 +241,83 @@ export default class Item extends Component {
         enabled: this.props.selected
       })
       .styleCursor(false)
+      .on('resizestart', e => {
+        if (this.props.selected) {
+          this.setState({
+            resizing: true,
+            resizeEdge: null, // we don't know yet
+            resizeStart: e.pageX,
+            resizeTime: 0
+          })
+        } else {
+          return false
+        }
+      })
+      .on('resizemove', e => {
+        if (this.state.resizing) {
+          let resizeEdge = this.state.resizeEdge
+
+          if (!resizeEdge) {
+            resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
+            this.setState({ resizeEdge })
+          }
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
+
+          if (this.props.moveResizeValidator) {
+            resizeTime = this.props.moveResizeValidator(
+              'resize',
+              this.props.item,
+              resizeTime,
+              resizeEdge
+            )
+          }
+
+          if (this.props.onResizing) {
+            this.props.onResizing(this.itemId, resizeTime, resizeEdge)
+          }
+
+          this.setState({
+            resizeTime
+          })
+        }
+      })
+      .on('resizeend', e => {
+        if (this.state.resizing) {
+          const { resizeEdge } = this.state
+          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
+
+          if (this.props.moveResizeValidator) {
+            resizeTime = this.props.moveResizeValidator(
+              'resize',
+              this.props.item,
+              resizeTime,
+              resizeEdge
+            )
+          }
+
+          if (this.props.onResized) {
+            this.props.onResized(
+              this.itemId,
+              resizeTime,
+              resizeEdge,
+              this.resizeTimeDelta(e, resizeEdge),
+              
+            )
+          }
+          this.setState({
+            resizing: null,
+            resizeStart: null,
+            resizeEdge: null,
+            resizeTime: null
+          })
+        }
+      })
       .on('dragstart', e => {
         if (this.props.selected) {
           const clickTime = this.timeFor(e);
           this.setState({
             dragging: true,
-            dragStart: { 
+            dragStart: {
               x: e.pageX,
               y: e.pageY,
             offset: this.itemTimeStart - clickTime },
@@ -311,76 +382,6 @@ export default class Item extends Component {
             preDragPosition: null,
             dragTime: null,
             dragGroupDelta: null
-          })
-        }
-      })
-      .on('resizestart', e => {
-        if (this.props.selected) {
-          this.setState({
-            resizing: true,
-            resizeEdge: null, // we don't know yet
-            resizeStart: e.pageX,
-            resizeTime: 0
-          })
-        } else {
-          return false
-        }
-      })
-      .on('resizemove', e => {
-        if (this.state.resizing) {
-          let resizeEdge = this.state.resizeEdge
-
-          if (!resizeEdge) {
-            resizeEdge = e.deltaRect.left !== 0 ? 'left' : 'right'
-            this.setState({ resizeEdge })
-          }
-          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
-
-          if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
-              'resize',
-              this.props.item,
-              resizeTime,
-              resizeEdge
-            )
-          }
-
-          if (this.props.onResizing) {
-            this.props.onResizing(this.itemId, resizeTime, resizeEdge)
-          }
-
-          this.setState({
-            resizeTime
-          })
-        }
-      })
-      .on('resizeend', e => {
-        if (this.state.resizing) {
-          const { resizeEdge } = this.state
-          let resizeTime = this.resizeTimeSnap(this.timeFor(e))
-
-          if (this.props.moveResizeValidator) {
-            resizeTime = this.props.moveResizeValidator(
-              'resize',
-              this.props.item,
-              resizeTime,
-              resizeEdge
-            )
-          }
-
-          if (this.props.onResized) {
-            this.props.onResized(
-              this.itemId,
-              resizeTime,
-              resizeEdge,
-              this.resizeTimeDelta(e, resizeEdge)
-            )
-          }
-          this.setState({
-            resizing: null,
-            resizeStart: null,
-            resizeEdge: null,
-            resizeTime: null
           })
         }
       })
@@ -462,13 +463,13 @@ export default class Item extends Component {
         accept: '.dragged-point',
         overlap: 0.75,
         ondragenter: (event) => {
-          this.props.onPointEnter(event,this.itemId, Number(event.relatedTarget.id))
+          this.props.onPointEnter(event,this.itemId, event.relatedTarget.id)
         },
         ondrop: (event) => {
-          this.props.onPointDrop(event, this.itemId, Number(event.relatedTarget.id))
+          this.props.onPointDrop(event, this.itemId, event.relatedTarget.id)
         },
         ondragleave: (event) => {
-          this.props.onPointLeave(event, this.itemId, Number(event.relatedTarget.id))
+          this.props.onPointLeave(event, this.itemId, event.relatedTarget.id)
         }
       })
     }

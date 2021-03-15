@@ -169,7 +169,7 @@ export default class ReactCalendarTimeline extends Component {
     sidebarWidth: 150,
     rightSidebarWidth: 0,
     dragSnap: 1000 * 60 * 15, // 15min
-    minResizeWidth: 20,
+    minResizeWidth: 3,
     stickyOffset: 0,
     stickyHeader: true,
     lineHeight: 30,
@@ -660,6 +660,7 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resizingItem = (item, resizeTime, edge) => {
+    console.log('resizingItem:',item, resizeTime, edge)
     this.setState({
       resizingItem: item,
       resizingEdge: edge,
@@ -668,6 +669,8 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resizedItem = (item, resizeTime, edge, timeDelta) => {
+    console.log('resizedItem:',item, resizeTime, edge)
+
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge)
@@ -773,6 +776,7 @@ export default class ReactCalendarTimeline extends Component {
         canvasWidth={canvasWidth}
         dimensionItems={dimensionItems}
         groupTops={groupTops}
+        collisionIncrease={this.props.collisionIncrease}
         items={this.props.items}
         onPointEnter={this.props.onPointEnter}
         onPointDrop={this.props.onPointDrop}
@@ -782,6 +786,7 @@ export default class ReactCalendarTimeline extends Component {
         keys={this.props.keys}
         selectedItem={this.state.selectedItem}
         dragSnap={this.props.dragSnap}
+        dragSnapForEvent={this.props.dragSnapForEvent}
         minResizeWidth={this.props.minResizeWidth}
         canChangeGroup={this.props.canChangeGroup}
         canMove={this.props.canMove}

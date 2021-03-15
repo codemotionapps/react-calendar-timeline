@@ -221,6 +221,7 @@ export default class Items extends Component {
               onPointLeave={this.props.onPointLeave}
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
+              collisionIncrease={this.props.collisionIncrease}
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
               scrollRef={this.props.scrollRef}
