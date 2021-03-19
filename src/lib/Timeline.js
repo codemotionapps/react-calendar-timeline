@@ -660,7 +660,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resizingItem = (item, resizeTime, edge) => {
-    console.log('resizingItem:',item, resizeTime, edge)
     this.setState({
       resizingItem: item,
       resizingEdge: edge,
@@ -669,8 +668,6 @@ export default class ReactCalendarTimeline extends Component {
   }
 
   resizedItem = (item, resizeTime, edge, timeDelta) => {
-    console.log('resizedItem:',item, resizeTime, edge)
-
     this.setState({ resizingItem: null, resizingEdge: null, resizeTime: null })
     if (this.props.onItemResize && timeDelta !== 0) {
       this.props.onItemResize(item, resizeTime, edge)
@@ -774,9 +771,11 @@ export default class ReactCalendarTimeline extends Component {
         canvasTimeStart={canvasTimeStart}
         canvasTimeEnd={canvasTimeEnd}
         canvasWidth={canvasWidth}
+        groupHeights={groupHeights}
         dimensionItems={dimensionItems}
         groupTops={groupTops}
         collisionIncrease={this.props.collisionIncrease}
+        increaseCollisionToSmallItems={this.props.increaseCollisionToSmallItems}
         items={this.props.items}
         onPointEnter={this.props.onPointEnter}
         onPointDrop={this.props.onPointDrop}

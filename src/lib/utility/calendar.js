@@ -154,11 +154,21 @@ export function getNextUnit(unit) {
   return nextUnits[unit] || ''
 }
 
+// export function convertWidthToTime(
+//   width,
+//   canvasWidth,
+//   canvasTimeStart,
+//   canvasTimeEnd,
+// ){
+
+// }
+
 export function calculateDimensions({
   itemTimeStart,
   itemTimeEnd,
   increaseItemCollision,
   collisionIncrease,
+  increaseCollisionToSmallItems,
   isDragging,
   isResizing,
   canvasTimeStart,
@@ -185,11 +195,18 @@ export function calculateDimensions({
   const effectiveEndTime = Math.min(itemEnd, canvasTimeEnd)
   const itemWidth = (effectiveEndTime - effectiveStartTime) * ratio
 
+  let collisionWidth = itemTimeRange
+  if(itemWidth < 70 && increaseCollisionToSmallItems){
+    collisionWidth = itemTimeRange + (collisionIncrease / ratio)
+  }else if (increaseItemCollision && collisionIncrease){
+    collisionWidth = itemTimeRange + (collisionIncrease / ratio)
+  }
+
   const dimensions = {
     left: Math.max(newItemStart - canvasTimeStart, 0) * ratio,
     width: Math.max(itemWidth, 3),
     collisionLeft: newItemStart,
-    collisionWidth: increaseItemCollision && collisionIncrease ? itemTimeRange + collisionIncrease : itemTimeRange
+    collisionWidth
   }
 
   return dimensions
@@ -394,7 +411,7 @@ export function stackItems(
     }
   }
 
-  const { keys, lineHeight, stackItems, itemHeightRatio, collisionIncrease } = props
+  const { keys, lineHeight, stackItems, itemHeightRatio, collisionIncrease, increaseCollisionToSmallItems } = props
   const {
     draggingItem,
     dragTime,
@@ -430,6 +447,7 @@ export function stackItems(
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
       increaseItemCollision: item.increaseItemCollision,
+      increaseCollisionToSmallItems,
       collisionIncrease,
       isDragging,
       isResizing,

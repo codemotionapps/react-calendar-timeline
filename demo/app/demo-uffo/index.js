@@ -359,7 +359,8 @@ export default class App extends Component {
 				groups={groups}
         items={items}
         connections={connections}
-        collisionIncrease={4 * 1000 * 3600 * 24} // 4 days
+        collisionIncrease={160} // 160px
+        increaseCollisionToSmallItems
         onPointEnter={isRelationAllowed}
         onPointDrop={onConnect}
         onPointLeave={()=>{}}

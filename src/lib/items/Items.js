@@ -80,6 +80,7 @@ export default class Items extends Component {
       nextProps.canChangeGroup === this.props.canChangeGroup &&
       nextProps.canMove === this.props.canMove &&
       nextProps.canResize === this.props.canResize &&
+      nextProps.groupHeights === this.props.groupHeights &&
       nextProps.canSelect === this.props.canSelect
     )
   }
@@ -173,6 +174,8 @@ export default class Items extends Component {
       const dimensionConnections = this.calcDimensionConnections(sortedDimensionItems,connections)
     // console.log('@@@@',sortedDimensionItems)
 
+    const canvasHeight = this.props.groupHeights.reduce((a, b) => a + b, 0)
+
     return (
       <div className="rct-items">
         {visibleItems
@@ -222,6 +225,7 @@ export default class Items extends Component {
               onItemDoubleClick={this.props.onItemDoubleClick}
               onContextMenu={this.props.onItemContextMenu}
               collisionIncrease={this.props.collisionIncrease}
+              increaseCollisionToSmallItems={this.props.increaseCollisionToSmallItems}
               onSelect={this.props.itemSelect}
               itemRenderer={this.props.itemRenderer}
               scrollRef={this.props.scrollRef}
@@ -229,8 +233,8 @@ export default class Items extends Component {
           ))}
           <svg
             id="svg-canvas"
-            width="3000"
-            viewBox={`0 0 3000 800`}
+            width={this.props.canvasWidth}
+            viewBox={`0 0 ${this.props.canvasWidth} ${canvasHeight}`}
             style={{ zIndex: 70 ,position:'absolute', top:0, left: 0, marginTop:64}}
           >
             {dimensionConnections.map((line,i) => <Connection {...line} selected={this.isLineSelected(line)} key={i} />)}
