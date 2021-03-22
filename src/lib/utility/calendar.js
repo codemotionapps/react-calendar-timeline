@@ -286,11 +286,11 @@ export function stack(items, groupOrders, lineHeight, groups) {
     var verticalMargin = 0
     for (i = 0, iMax = group.length; i < iMax; i++) {
       var item = group[i]
-      verticalMargin = lineHeight - item.dimensions.height
+      verticalMargin = (groupVal.lineHeight || lineHeight) - item.dimensions.height
 
       if (item.dimensions.stack && item.dimensions.top === null) {
         item.dimensions.top = totalHeight + verticalMargin
-        groupHeight = Math.max(groupHeight, lineHeight)
+        groupHeight = Math.max(groupHeight, (groupVal.lineHeight || lineHeight))
         do {
           var collidingItem = null
           for (var j = 0, jj = group.length; j < jj; j++) {
@@ -299,7 +299,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
               other.dimensions.top !== null &&
               other !== item &&
               other.dimensions.stack &&
-              collision(item.dimensions, other.dimensions, lineHeight)
+              collision(item.dimensions, other.dimensions, (groupVal.lineHeight || lineHeight))
             ) {
               collidingItem = other
               break
@@ -310,7 +310,7 @@ export function stack(items, groupOrders, lineHeight, groups) {
 
           if (collidingItem != null) {
             // There is a collision. Reposition the items above the colliding element
-            item.dimensions.top = collidingItem.dimensions.top + lineHeight
+            item.dimensions.top = collidingItem.dimensions.top + (groupVal.lineHeight || lineHeight)
             groupHeight = Math.max(
               groupHeight,
               item.dimensions.top + item.dimensions.height - totalHeight
@@ -324,8 +324,8 @@ export function stack(items, groupOrders, lineHeight, groups) {
       groupHeights.push(groupVal.height)
       totalHeight += groupVal.height
     } else {
-      groupHeights.push(Math.max(groupHeight + verticalMargin, lineHeight))
-      totalHeight += Math.max(groupHeight + verticalMargin, lineHeight)
+      groupHeights.push(Math.max(groupHeight + verticalMargin, (groupVal.lineHeight || lineHeight)))
+      totalHeight += Math.max(groupHeight + verticalMargin, (groupVal.lineHeight || lineHeight))
     }
   })
   return {
@@ -443,6 +443,7 @@ export function stackItems(
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
 
+    
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
@@ -458,14 +459,19 @@ export function stackItems(
       resizingEdge,
       resizeTime
     })
-
+    
     if (dimension) {
+      let currentGroup = groups.find(group => String(group[keys.groupIdKey]) === String(item[keys.itemGroupKey]))
       dimension.top = null
       dimension.order = isDragging
         ? newGroupOrder
         : groupOrders[_get(item, keys.itemGroupKey)]
       dimension.stack = !item.isOverlay
       dimension.height = lineHeight * itemHeightRatio
+      if(currentGroup && currentGroup.lineHeight) {
+        dimension.height = currentGroup.lineHeight * (currentGroup.itemHeightRatio || itemHeightRatio) // overwrite from group height
+        console.log(dimension)
+      }
       dimension.isDragging = isDragging
 
       memo.push({

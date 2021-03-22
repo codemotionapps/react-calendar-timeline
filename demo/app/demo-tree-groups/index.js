@@ -4,6 +4,7 @@ import moment from 'moment'
 import Timeline from 'react-calendar-timeline'
 
 import generateFakeData from '../generate-fake-data'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 var keys = {
   groupIdKey: 'id',
@@ -98,25 +99,28 @@ export default class App extends Component {
       })
 
     return (
-      <Timeline
-        groups={newGroups}
-        items={items}
-        keys={keys}
-        sidebarWidth={150}
-        sidebarContent={<div>Above The Left</div>}
-        rightSidebarWidth={150}
-        rightSidebarContent={<div>Above The Right</div>}
-        canMove={true}
-        canResize="right"
-        canSelect
-        itemsSorted
-        itemTouchSendsClick={false}
-        stackItems
-        itemHeightRatio={0.75}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
-      />
+      <DragDropContext onDragEnd={() => {}}>
+          <Timeline
+            groups={newGroups}
+            items={items}
+            keys={keys}
+            connections={[]}
+            sidebarWidth={150}
+            sidebarContent={<div>Above The Left</div>}
+            rightSidebarWidth={150}
+            rightSidebarContent={<div>Above The Right</div>}
+            canMove={true}
+            canResize="right"
+            canSelect
+            itemsSorted
+            itemTouchSendsClick={false}
+            stackItems
+            itemHeightRatio={0.75}
+            defaultTimeStart={defaultTimeStart}
+            defaultTimeEnd={defaultTimeEnd}
+            horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
+          />
+      </DragDropContext>
     )
   }
 }

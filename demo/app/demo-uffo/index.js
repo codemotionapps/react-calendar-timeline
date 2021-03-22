@@ -38,10 +38,19 @@ var keys = {
 }
 
 const groups = [
-  { id: '1', allowDrop:true, title: 'Tia', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/2377d3dbacc009aec666744a0e43614890af7033' },
-  { id: '2', allowDrop:true, title: 'Mike', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/9184942b5f3e799ba117cbde235a4ef689baad11?1528382473' },
-  { id: '3', allowDrop:true, title: 'Clara', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/7cd097265abbbbce3830ce9b8bb3949a9a5f468a' },
-  { id: 'empty', allowDrop:false, title: '', height: 800 },
+  {
+    root: true,  lineHeight: 32,itemHeightRatio: 0.9,
+    id: '22', allowDrop: true, title: 'Mike', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/9184942b5f3e799ba117cbde235a4ef689baad11?1528382473'
+  },
+  { id: '2', parent: '22', allowDrop: true, title: 'Mike', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/9184942b5f3e799ba117cbde235a4ef689baad11?1528382473' },
+  {
+    root: true, lineHeight: 32,itemHeightRatio: 0.9,
+     id: '11', allowDrop: true, title: 'Tia', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/2377d3dbacc009aec666744a0e43614890af7033'
+  },
+  { id: '1', parent: '11', allowDrop: true, title: 'Tia', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/2377d3dbacc009aec666744a0e43614890af7033' },
+  { id: '3', parent: '11', allowDrop: true, title: 'Clara', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/7cd097265abbbbce3830ce9b8bb3949a9a5f468a' },
+  { root: true, id: 'empty-root', allowDrop: false, title: '', height: 800 },
+  { parent: 'empty-root', id: 'empty', allowDrop: false, title: '', height: 800 },
 ]
 
 const eventsByDay2 = {
@@ -85,10 +94,32 @@ const connections = [
 
 const items = [
   {
+    id: 1121,
+    group: 11,
+    allocation: true,
+    title: 'Time Allocation',
+    canChangeGroup: false,
+    start: moment().add(-6, 'days').valueOf(),
+    end: moment().valueOf(),
+    color: '#c9622a',
+    bgColor: '#fec2a0',
+  },
+  {
     id: 1,
     group: 1,
     title: 'My Blocked task',
     start: moment().add(-3, 'days').valueOf(),
+    end: moment().valueOf(),
+    color: '#c9622a',
+    bgColor: '#fec2a0',
+  },
+  {
+    id: 8888,
+    group: 22,
+    allocation: true,
+    canChangeGroup: false,
+    title: 'Allocation user 1',
+    start: moment().add(-8, 'days').valueOf(),
     end: moment().valueOf(),
     color: '#c9622a',
     bgColor: '#fec2a0',
@@ -141,17 +172,19 @@ const items = [
   },
 ]
 
-const GroupRenderer = ({ group }) => (
-	<div className="v h" style={{ height: '100%' }}>
-		{group.picture && <img className="avatar40" src={group.picture} alt="avatar" />}
+const GroupRenderer = ({ group, toggleGroup}) => {
+  if(group.root) return <div onClick={() => toggleGroup(parseInt(group.id))} className="v h" style={{ height: '100%' ,cursor: 'pointer'}}>
+		{group.picture && <img className="avatar24" src={group.picture} alt="avatar" />}
+    {group.title && <span style={{marginLeft:8}}>{group.title}</span>}
 	</div>
-)
+  return <div className="v h" style={{ height: '100%' }}>
+  {group.picture && <img className="avatar24" src={group.picture} alt="avatar" />}
+</div>
+}
 
 const DayLabelRenderer = ({ time,unit,width,events }) => {
   const weekDay = width > 120 ? time.format('dddd') : time.format('dd')[0]
   const day = time.format('D')
-
-  console.log(events)
 
   return <div className={`alternative-days${width > 120 ? ' space-between' : ''}`}>
       {events && <div className="milestone" style={{background:events[0].color}}>{events[0].title}</div>}
@@ -179,6 +212,11 @@ export default class App extends Component {
       eventsByDay,
 			defaultTimeStart,
 			defaultTimeEnd,
+      openGroups: {
+        '22':true,
+        '11':true,
+        'empty-root': true,
+      }
     }
     setTimeout(()=>{
       this.setState({eventsByDay:eventsByDay2})
@@ -337,14 +375,31 @@ export default class App extends Component {
     }
   }
 
+
+  // toggleGroup = this.toggleGroup.bind(this)
+  toggleGroup = id => {
+    const { openGroups } = this.state
+    this.setState({
+      openGroups: {
+        ...openGroups,
+        [id]: !openGroups[id]
+      }
+    })
+  }
+
   render() {
 		const {
 			defaultTimeStart,
       defaultTimeEnd,
       selected,
       groups,
+      openGroups,
       items
 		} = this.state
+
+
+    const newGroups = groups
+      .filter(g => g.root || openGroups[g.parent])
 
 
 		return <DragDropContext onDragEnd={this.onDragEnd}><div className="v">
@@ -356,7 +411,7 @@ export default class App extends Component {
 				onItemMove={this.handleItemMove}
 				onItemResize={this.handleItemResize}
 				onTimeChange={this.handleTimeChangeFirst}
-				groups={groups}
+				groups={newGroups}
         items={items}
         connections={connections}
         collisionIncrease={160} // 160px
@@ -378,7 +433,7 @@ export default class App extends Component {
         itemHeightRatio={0.75}
         dayLabelRenderer={DayLabelRenderer}
 				itemRenderer={TimelineItem}
-				groupRenderer={GroupRenderer}
+				groupRenderer={props => <GroupRenderer {...props} toggleGroup={this.toggleGroup}/>}
 				sidebarContent={<div>Team</div>}
 				itemsSorted
 				itemTouchSendsClick
@@ -390,6 +445,7 @@ export default class App extends Component {
 				canResize="both"
 				defaultTimeStart={defaultTimeStart}
 				defaultTimeEnd={defaultTimeEnd}
+        // horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 			>
 				<TimelineMarkers>
 					<TodayMarker>

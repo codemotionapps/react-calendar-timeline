@@ -82,6 +82,13 @@ body {
 }
 
 //Some stuff
+.avatar24{
+  border-radius: 50%;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background: white;
+}
 .avatar40{
   border-radius: 50%;
   display: inline-block;
@@ -158,5 +165,5 @@ body {
 .row-root {
   position: relative;
   z-index: 999;
-  background-color: darkgray !important;
+  background-color: rgba(54, 122, 179, 0.46)!important;
 }
