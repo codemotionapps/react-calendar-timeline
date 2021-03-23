@@ -775,7 +775,6 @@ export default class ReactCalendarTimeline extends Component {
         dimensionItems={dimensionItems}
         groupTops={groupTops}
         collisionIncrease={this.props.collisionIncrease}
-        increaseCollisionToSmallItems={this.props.increaseCollisionToSmallItems}
         items={this.props.items}
         onPointEnter={this.props.onPointEnter}
         onPointDrop={this.props.onPointDrop}

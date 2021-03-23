@@ -411,7 +411,7 @@ export function stackItems(
     }
   }
 
-  const { keys, lineHeight, stackItems, itemHeightRatio, collisionIncrease, increaseCollisionToSmallItems } = props
+  const { keys, lineHeight, stackItems, itemHeightRatio, collisionIncrease } = props
   const {
     draggingItem,
     dragTime,
@@ -443,12 +443,12 @@ export function stackItems(
     const isDragging = itemId === draggingItem
     const isResizing = itemId === resizingItem
 
-    
+    let currentGroup = groups.find(group => String(group[keys.groupIdKey]) === String(item[keys.itemGroupKey]))
     let dimension = calculateDimensions({
       itemTimeStart: _get(item, keys.itemTimeStartKey),
       itemTimeEnd: _get(item, keys.itemTimeEndKey),
       increaseItemCollision: item.increaseItemCollision,
-      increaseCollisionToSmallItems,
+      increaseCollisionToSmallItems: currentGroup && currentGroup.increaseCollisionToSmallItems,
       collisionIncrease,
       isDragging,
       isResizing,
@@ -461,7 +461,6 @@ export function stackItems(
     })
     
     if (dimension) {
-      let currentGroup = groups.find(group => String(group[keys.groupIdKey]) === String(item[keys.itemGroupKey]))
       dimension.top = null
       dimension.order = isDragging
         ? newGroupOrder
@@ -470,7 +469,6 @@ export function stackItems(
       dimension.height = lineHeight * itemHeightRatio
       if(currentGroup && currentGroup.lineHeight) {
         dimension.height = currentGroup.lineHeight * (currentGroup.itemHeightRatio || itemHeightRatio) // overwrite from group height
-        console.log(dimension)
       }
       dimension.isDragging = isDragging
 

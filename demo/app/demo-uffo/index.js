@@ -39,6 +39,7 @@ var keys = {
 
 const groups = [
   {
+    increaseCollisionToSmallItems: true,
     root: true,  lineHeight: 32,itemHeightRatio: 0.9,
     id: '22', allowDrop: true, title: 'Mike', rightTitle: 'Veum', bgColor: '#abd1f2', picture: 'https://ora-profile-pictures.s3.amazonaws.com/9184942b5f3e799ba117cbde235a4ef689baad11?1528382473'
   },
@@ -415,7 +416,6 @@ export default class App extends Component {
         items={items}
         connections={connections}
         collisionIncrease={160} // 160px
-        increaseCollisionToSmallItems
         onPointEnter={isRelationAllowed}
         onPointDrop={onConnect}
         onPointLeave={()=>{}}
