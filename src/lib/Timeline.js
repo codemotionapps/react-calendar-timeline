@@ -445,11 +445,11 @@ export default class ReactCalendarTimeline extends Component {
       groupHeights,
       groupTops
     })
-    
+
     this.scrollComponent.scrollLeft = width
     this.headerRef.scrollLeft = width
   }
-  
+
   onScroll = scrollX => {
     const width = this.state.width
     let newScrollX = scrollX
@@ -468,7 +468,7 @@ export default class ReactCalendarTimeline extends Component {
     const canvasTimeStart = this.state.canvasTimeStart
 
     const zoom = this.state.visibleTimeEnd - this.state.visibleTimeStart
-    
+
     const visibleTimeStart = canvasTimeStart + zoom * scrollX / width
 
     if (
@@ -705,6 +705,10 @@ export default class ReactCalendarTimeline extends Component {
     if (this.props.onCanvasClick == null) return
 
     const time = this.getTimeFromRowClickEvent(e)
+    if(rowIndex === 'empty-row'){
+      this.props.onCanvasClick('empty-row', time, e)
+      return
+    }
     const groupId = _get(
       this.props.groups[rowIndex],
       this.props.keys.groupIdKey

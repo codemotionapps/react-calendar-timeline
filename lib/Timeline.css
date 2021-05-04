@@ -144,6 +144,10 @@
 .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
   background: rgba(250, 246, 225, 0.5);
 }
+.react-calendar-timeline .rct-horizontal-lines {
+  display: flex;
+  flex-direction: column;
+}
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even,
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
   border-bottom: 1px solid #bbb;

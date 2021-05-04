@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
+import { Droppable } from 'react-beautiful-dnd'
+import PreventClickOnDrag from '../interaction/PreventClickOnDrag'
 import GroupRow from './GroupRow'
 
 export default class GroupRows extends Component {
@@ -59,6 +61,15 @@ export default class GroupRows extends Component {
       )
     }
 
-    return <div className="rct-horizontal-lines">{lines}</div>
+    return <div className="rct-horizontal-lines">
+      {lines}
+
+      {droppable && <Droppable droppableId="empty-row">
+          {(provided) => (<PreventClickOnDrag clickTolerance={clickTolerance} onClick={evt => onRowClick(evt,'empty-row')}>
+            <div style={{width:canvasWidth}} ref={provided.innerRef} className="empty-row grow" />
+          </PreventClickOnDrag>)}
+        </Droppable>}
+
+    </div>
   }
 }

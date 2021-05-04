@@ -213,6 +213,8 @@ $weekend: rgba(250, 246, 225, 0.5);
     .rct-hl-even {
       background: $row-background-even;
     }
+    display: flex;
+    flex-direction: column;
   }
 
   .rct-cursor-line {
