@@ -72,6 +72,7 @@ class Header extends Component {
 
     return (
       <div
+        // style={{ width: canvasWidth }}
         className="rct-header-container"
         data-testid="timeline-elements-container"
         ref={headerRef}

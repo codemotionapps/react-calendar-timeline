@@ -35,12 +35,12 @@
   height: 100%;
 }
 .react-calendar-timeline .rct-header-container {
-  z-index: 90;
+  z-index: 290;
   display: flex;
   overflow: hidden;
-  position: fixed;
+  position: sticky;
   left: 0;
-  top: 35px !important;
+  right: 0;
   user-select: none;
   background-color: white;
 }

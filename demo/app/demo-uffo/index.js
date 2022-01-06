@@ -447,6 +447,7 @@ export default class App extends Component {
 				defaultTimeEnd={defaultTimeEnd}
         // horizontalLineClassNamesForGroup={(group) => group.root ? ["row-root"] : []}
 			>
+        
 				<TimelineMarkers>
 					<TodayMarker>
 						{({ styles }) => {

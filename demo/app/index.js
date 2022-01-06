@@ -58,7 +58,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
+        <div className='demo-parent'>
           <MenuWithRouter />
           <div className="demo-demo">
             <Route path="/" exact component={demos[Object.keys(demos)[0]]} />

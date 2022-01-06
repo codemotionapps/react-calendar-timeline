@@ -84,6 +84,7 @@ export default class App extends Component {
 
     return (
       <Timeline
+        noHeader
         groups={groups2}
         items={items2}
         keys={keys}

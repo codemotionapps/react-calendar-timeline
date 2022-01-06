@@ -412,7 +412,7 @@ export default class ReactCalendarTimeline extends Component {
       this.scrollComponent.scrollLeft = scrollLeft
     }
 
-    if (this.scrollHeaderRef.scrollLeft !== scrollLeft) {
+    if (this.scrollHeaderRef && this.scrollHeaderRef.scrollLeft !== scrollLeft) {
       this.scrollHeaderRef.scrollLeft = scrollLeft
     }
   }
@@ -447,7 +447,7 @@ export default class ReactCalendarTimeline extends Component {
     })
 
     this.scrollComponent.scrollLeft = width
-    this.headerRef.scrollLeft = width
+    if(this.headerRef) this.headerRef.scrollLeft = width
   }
 
   onScroll = scrollX => {
@@ -462,7 +462,7 @@ export default class ReactCalendarTimeline extends Component {
       newScrollX -= width
     }
 
-    this.headerRef.scrollLeft = newScrollX
+    if (this.headerRef) this.headerRef.scrollLeft = newScrollX
     this.scrollComponent.scrollLeft = newScrollX
 
     const canvasTimeStart = this.state.canvasTimeStart
@@ -783,7 +783,7 @@ export default class ReactCalendarTimeline extends Component {
         onPointEnter={this.props.onPointEnter}
         onPointDrop={this.props.onPointDrop}
         onPointLeave={this.props.onPointLeave}
-        connections={this.props.connections}
+        connections={this.props.connections || []}
         groups={this.props.groups}
         keys={this.props.keys}
         selectedItem={this.state.selectedItem}
@@ -841,6 +841,7 @@ export default class ReactCalendarTimeline extends Component {
     headerLabelGroupHeight,
     headerLabelHeight
   ) {
+    if(this.props.noHeader) return null
     return (
       <Header
         eventsByDay={this.props.eventsByDay}
