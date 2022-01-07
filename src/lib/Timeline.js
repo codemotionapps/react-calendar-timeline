@@ -48,6 +48,7 @@ export default class ReactCalendarTimeline extends Component {
     dayLabelRenderer: PropTypes.func,
     handleDayClick: PropTypes.func,
     lineHeight: PropTypes.number,
+    noHeader: PropTypes.bool,
     headerLabelGroupHeight: PropTypes.number,
     headerLabelHeight: PropTypes.number,
     itemHeightRatio: PropTypes.number,
@@ -1002,7 +1003,7 @@ export default class ReactCalendarTimeline extends Component {
     }
 
     const outerComponentStyle = {
-      height: `${height + 64}px`
+      height: this.props.noHeader ? `${height}px` : `${height + 64}px`
     }
 
     return (
@@ -1045,7 +1046,7 @@ export default class ReactCalendarTimeline extends Component {
                   headerLabelGroupHeight,
                   headerLabelHeight
                 )}
-                <div style={{height: 64}} />
+                {!this.props.noHeader && <div style={{height: 64}} />}
                 <MarkerCanvas>
                   {this.rows(canvasWidth, groupHeights, groups)}
                   {this.items(
